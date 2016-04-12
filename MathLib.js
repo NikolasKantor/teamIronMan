@@ -3,6 +3,22 @@
 
 class MathLib {
 
+	static add(numbers) {
+		return numbers[1] + numbers[0]
+	}
+
+	static sub(numbers) {
+		return numbers[1] - numbers[0]
+	}
+
+	static mul(numbers) {
+		return numbers[1] * numbers[0]
+	}
+
+	static div(numbers) {
+		return numbers[1] / numbers[0]
+	}
+
 	static helloWorld() {
 		return 'very script, much class, WOW!';
 	}
