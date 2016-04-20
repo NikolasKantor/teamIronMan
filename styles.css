@@ -1,3 +1,10 @@
+
+flexus-toolbar {
+	background-color: #607D8B !important;
+}
+
+
+/*
 body {
 	font-family: Segoe UI, serif;
 }
@@ -22,3 +29,4 @@ button {
 		flex-shrink: 0;
 		flex-basis: 33%;
 	}
+*/

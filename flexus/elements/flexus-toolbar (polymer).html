@@ -1,0 +1,36 @@
+<!--link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-styles/paper-styles.html"-->
+<dom-module id="flexus-toolbar">
+	
+	<!-- needed because it contains styles of toolbar.
+	custom element (for now) only contains the logic and shadow dom >
+	<link rel="import" type="css" href="../css/material.css">
+	<link rel="import" type="css" href="../css/material-icons.css"-->
+
+	<link rel="import" type="css" href="flexus-toolbar.css">
+
+	<template>
+
+		<!--template is="dom-if" if="{{!multisection}}">
+			<section>
+				<content></content>
+			</section>
+		</template>
+
+		<template is="dom-if" if="{{multisection}}">
+			<content></content>
+		</template-->
+	
+		<content></content>
+
+		<!--template is="dom-if" if="{{overlap}}"-->
+			<div id="overlapping"></div>
+		<!--/template-->
+
+	</template>
+
+</dom-module>
+
+<script src="../animate-polyfill.js"></script>
+<script src="es6polymer.js"></script>
+<script src="flexus-toolbar.js"></script>

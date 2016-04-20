@@ -1,0 +1,29 @@
+<dom-module id="flexus-scene">
+	
+	<!-- needed because it contains styles of toolbar.
+	custom element (for now) only contains the logic and shadow dom -->
+	<link rel="import" type="css" href="../css/material.css">
+	<link rel="import" type="css" href="../css/material-icons.css">
+
+	<link rel="import" type="css" href="flexus-scene.css">
+
+	<template>
+
+		<nexus-toolbar tablet-only elevation="1">
+			<button icon="menu"></button>
+		</nexus-toolbar>
+
+		<div id="views">
+			<content select="*"></content>
+		</div>
+
+		<!--template is="dom-if" if="{{haswow}}">
+			<content select="[wow]"></content>
+		</template-->
+
+	</template>
+
+</dom-module>
+
+<script src="es6polymer.js"></script>
+<script src="flexus-scene.js"></script>

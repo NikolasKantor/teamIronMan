@@ -1,0 +1,98 @@
+<!--link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-styles/paper-styles.html"-->
+<dom-module id="nexus-toolbar">
+
+	<style>
+		:host([ratio="2:1"]) {
+			padding-top: 50%;
+		}
+		:host([ratio="16:9"]) {
+			padding-top: 56.25%;
+		}
+		:host([ratio="3:2"]) {
+			padding-top: 66.6666%;
+		}
+		section,
+		::content > section {
+			/*height: 56px;
+			padding: 0 16px;*/
+			height: 64px;
+			padding: 0 1rem;
+			display: flex;
+			align-items: center;
+		}
+		#bg,
+		.temp-fit,
+		.content {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+		}
+		#bottom {
+			position: absolute;
+			bottom: 0;
+			padding-left: calc(1rem + 56px);
+		}
+	</style>
+
+	<template>
+
+		<div fit id="bg">
+		<content select="[toolbar-bg]"></content>
+		</div>
+
+		<template is="dom-if" if="{{scrollable}}">
+			<div class="content">
+				<section id="bottom">
+					<content select="[title]"></content>
+				</section>
+				<section id="top">
+					<content></content>
+				</section>
+			</div>
+		</template>
+
+		<template is="dom-if" if="{{!scrollable}}">
+			<section class="temp-fit">
+				<content></content>
+			</section>
+		</template>
+
+		<!--template is="dom-if" if="{{haswow}}">
+			<div class="wow">
+				<content select="[wow]"></content>
+			</div>
+		</template>
+
+		<div class="primary" hidden="{{!hasprimary}}">
+			<content select="paper-input[primary]"></content>
+		</div>
+
+		<div class="secondary" hidden="{{!hassecondary}}">
+			<content select="paper-input[secondary]"></content>
+		</div>
+
+		<template is="dom-if" if="{{hastabs}}">
+			<div id="tabsbar">
+				<content select="paper-tabs"></content>
+			</div>
+		</template-->
+
+		<!--template is="dom-if" if="{{sections}}">
+			<content></content>
+		</template>
+
+		<template is="dom-if" if="{{!sections}}">
+			<section>
+				<content></content>
+			</section>
+		</template-->
+
+	</template>
+
+</dom-module>
+
+<script src="es6polymer.js"></script>
+<script src="nexus-toolbar.js"></script>

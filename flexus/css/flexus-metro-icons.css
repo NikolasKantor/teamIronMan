@@ -1,0 +1,354 @@
+@font-face {
+  font-family: 'Segoe MDL2 Assets';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Segoe MDL2 Assets'), url('../../img/segmdl2.ttf') format('truetype');
+}
+[icon]:before {
+  font-family: "Segoe MDL2 Assets", "Symbols";
+  content: '';
+  font-size: 24px;
+  font-weight: 100;
+  letter-spacing: 0;
+  /*-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;*/
+}
+i[icon]:before {
+  font-size: inherit;
+}
+/*
+minimize e921
+maximize e922
+restore e923
+*/
+[icon="arrow-back"]:before {
+  content: '\E112';
+}
+[icon="arrow-forward"]:before {
+  content: '\E111';
+}
+[icon="share"]:before {
+  content: '\E72D';
+}
+[icon="menu"]:before {
+  content: '\E700';
+}
+[icon="win-minimize"]:before {
+  content: '\E949';
+}
+[icon="win-maximize"]:before {
+  content: '\E922';
+}
+[icon="win-restore"]:before {
+  content: '\E923';
+}
+[icon="win-close"]:before {
+  content: '\E947';
+}
+[icon="computer"]:before {
+  content: '\EC4E';
+}
+[icon="laptop"]:before {
+  content: '\E770';
+}
+[icon="tablet"]:before {
+  content: '\E70A';
+}
+[icon="phone"]:before {
+  content: '\E25A';
+}
+[icon="cast"]:before {
+  content: '\EC15';
+}
+[icon="cast-screen"]:before {
+  content: '\EC16';
+}
+[icon="second-screen"]:before {
+  content: '\EC17';
+}
+[icon="folder"]:before {
+  content: '\E8B7';
+}
+[icon="add"]:before {
+  content: '\E109';
+}
+[icon="clear"]:before {
+  content: '\E10A';
+}
+[icon="x"]:before {
+  content: '\E10A';
+}
+[icon="close"]:before {
+  content: '\E10A';
+}
+[icon="check"]:before {
+  content: '\E10B';
+}
+[icon="done"]:before {
+  content: '\E10B';
+}
+[icon="undo"]:before {
+  content: '\E10E';
+}
+[icon="redo"]:before {
+  content: '\E10D';
+}
+[icon="settings"]:before {
+  content: '\E115';
+}
+[icon="more"]:before {
+  content: '\E10C';
+}
+[icon="more-vert"]:before {
+  content: '\E10C';
+}
+[icon="more-horiz"]:before {
+  content: '\E10C';
+}
+/*
+.doicon('editor:mode-edit', 'E104');
+.doicon('image:edit', 'E104');*/
+[icon="create"]:before {
+  content: '\E104';
+}
+[icon="delete"]:before {
+  content: '\E107';
+}
+[icon="save"]:before {
+  content: '\E105';
+}
+[icon="edit"]:before {
+  content: '\E104';
+}
+[icon="search"]:before {
+  content: '\E1A3';
+}
+[icon="fullscreen"]:before {
+  content: '\E1D9';
+}
+[icon="fullscreen-exit"]:before {
+  content: '\E1D8';
+}
+[icon="star-outline"]:before {
+  content: '\E24A';
+}
+[icon="star"]:before {
+  content: '\E249';
+}
+[icon="lock-open"]:before {
+  content: '\E1F7';
+}
+[icon="lock-outline"]:before {
+  content: '\E1F8';
+}
+[icon="account-box"]:before {
+  content: '\E13D';
+}
+[icon="account-circle"]:before {
+  content: '\E13D';
+}
+/*
+.doicon('editor:format-align-left', 'E1A2');
+.doicon('editor:format-align-center', 'E1A1');
+.doicon('editor:format-align-right', 'E1A0');
+
+
+.doicon('communication:chat', 'E134');
+.doicon('communication:phone', 'E717');
+.doicon('communication:email', 'E715');
+
+
+.doicon('image:crop', 'E7A8'); // 123
+
+.doicon('device:bluetooth', 'E702');
+.doicon('device:wifi-tethering', 'E95A');
+
+.doicon('hardware:headset', 'E7F6');
+
+.doicon('av:skip-previous', 'E100');
+.doicon('av:skip-next', 'E101');
+.doicon('av:play-arrow', 'E102');
+.doicon('av:pause', 'E103');
+.doicon('av:shuffle', 'E14B');
+.doicon('av:repeat', 'E8EE'); // 895 / 8EB
+.doicon('av:repeat-one', 'E8ED');
+.doicon('av:volume-up', 'E767');
+.doicon('av:queue-music', 'E90B');
+
+.doicon('social:person-add', 'E8FA');
+*/
+[icon="dev"]:before {
+  content: '\E943';
+}
+[icon="drawer"]:before {
+  content: '\E145';
+}
+[icon="drawer-right"]:before {
+  content: '\E146';
+}
+[icon="footer"]:before {
+  content: '\E147';
+}
+[icon="refresh"]:before {
+  content: '\E149';
+}
+[icon="home"]:before {
+  content: '\E10F';
+}
+[icon="wrench"]:before {
+  content: '\E15E';
+}
+[icon="menu-library"]:before {
+  content: '\E825';
+}
+[icon="menu-playlist"]:before {
+  content: '\E292';
+}
+[icon="menu-presenter"]:before {
+  content: '\E8F9';
+}
+[icon="projection-start"]:before {
+  content: '\E2B4';
+}
+[icon="projection-stop"]:before {
+  content: '\E2B3';
+}
+[icon="projector"]:before {
+  content: '\E95D';
+}
+[icon="webcam"]:before {
+  content: '\E960';
+}
+[icon="keyboard-mouse"]:before {
+  content: '\E961';
+}
+[icon="mouse"]:before {
+  content: '\E962';
+}
+[icon="tablet-pen"]:before {
+  content: '\E929';
+}
+[icon="headset"]:before {
+  content: '\E95B';
+}
+[icon="wireless"]:before {
+  content: '\E957';
+}
+[icon="filter"]:before {
+  content: '\E71C';
+}
+[icon="trim"]:before {
+  content: '\E78A';
+}
+[icon="switch"]:before {
+  content: '\E8AB';
+}
+[icon="sync"]:before {
+  content: '\E895';
+}
+[icon="upload"]:before {
+  content: '\E898';
+}
+[icon="download"]:before {
+  content: '\E896';
+}
+[icon="usb"]:before {
+  content: '\E88E';
+}
+[icon="explorer"]:before {
+  content: '\EC50';
+}
+[icon="calendar-day"]:before {
+  content: '\E161';
+}
+[icon="calendar-week"]:before {
+  content: '\E162';
+}
+[icon="calendar-month"]:before {
+  content: '\E163';
+}
+[icon="calendar"]:before {
+  content: '\E163';
+}
+[icon="shop"]:before {
+  content: '\E719';
+}
+[icon="view"]:before {
+  content: '\E18B';
+}
+/*
+[icon="projection"]:before {
+	content: '\E2B4';
+}
+[icon="projection-close"]:before {
+	content: '\E2B3';
+}
+
+[icon="chevron-left"]:before {
+	content: '\E09A';
+}
+[icon="chevron-right"]:before {
+	content: '\E09B';
+}
+[icon="chevron-up"]:before {
+	content: '\E09C';
+}
+[icon="chevron-bottom"]:before {
+	content: '\E09D';
+}
+
+
+
+[icon="multimonitor"]:before {
+	content: '\E07E';
+}
+[icon="multimonitorx"]:before {
+	content: '\E24B';
+}
+*/
+[icon="link"]:before {
+  content: '\E71B';
+}
+[icon="content-cut"]:before {
+  content: '\E8C6';
+}
+[icon="content-copy"]:before {
+  content: '\E8C8';
+}
+[icon="content-paste"]:before {
+  content: '\E77F';
+}
+[icon="format-align-left"]:before {
+  content: '\E8E4';
+}
+[icon="format-align-center"]:before {
+  content: '\E8E3';
+}
+[icon="format-align-right"]:before {
+  content: '\E8E2';
+}
+[icon="format-list-bulleted"]:before {
+  content: '\E8FD';
+}
+[icon="format-italic"]:before {
+  content: '\E8DB';
+}
+[icon="format-bold"]:before {
+  content: '\E8DD';
+}
+[icon="format-underline"]:before {
+  content: '\E8DC';
+}
+[icon="format-size"]:before {
+  content: '\E8E9';
+}
+[icon="format-font"]:before {
+  content: '\E8D2';
+}
+/*
+U+E8D2 Font Font  
+U+E8D3 Fontcolor Fontcolor  
+U+E8E7 Fontdecrease FontDecrease  
+U+E8E8 Fontincrease FontIncrease  
+U+E8E9 Fontsize FontSize 
+*/
