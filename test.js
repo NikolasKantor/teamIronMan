@@ -10,6 +10,48 @@ describe('MathLib', function() {
 	});
 
 });
+
+
+describe('MathLib', function() {
+
+	describe('#add()', function () {
+		it('return 5216', function () {
+			assert.equal(5216, MathLib.add([1568,3648]), 'these numbers are equal');
+		});
+	});
+
+});
+
+describe('MathLib', function() {
+
+	describe('#sub()', function () {
+		it('return 5216', function () {
+			assert.equal(60, MathLib.div([60,3600]), 'these numbers are equal');
+		});
+	});
+
+});
+
+
+describe('MathLib', function() {
+
+	describe('#sub()', function () {
+		it('return 5216', function () {
+			assert.equal(3540, MathLib.sub([60,3600]), 'these numbers are equal');
+		});
+	});
+
+});
+
+describe('MathLib', function() {
+
+	describe('#sub()', function () {
+		it('return 5216', function () {
+			assert.equal(33822242, MathLib.mul([2689,12578]), 'these numbers are equal');
+		});
+	});
+
+});
 /*
 describe('Array', function() {
 
