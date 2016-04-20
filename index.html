@@ -3,57 +3,62 @@
 <head>
 	<title>ivs-calc #teamIronMan</title>
 	<meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi">
 
+	<link rel="stylesheet" type="text/css" href="roboto/font-face-latin-ext.css">
 	<link rel="stylesheet" type="text/css" href="flexus/css/flexus-layout.css">
 	<link rel="stylesheet" type="text/css" href="flexus/css/flexus-material.css">
 	<link rel="stylesheet" type="text/css" href="flexus/css/flexus-material-icons.css">
-	<!--script src="flexus/flexus.styleloader.js"></script-->
 	<link rel="stylesheet" href="styles.css">
 </head>
 
-<body fx-app light>
+<body fx-app dark>
 
-	<flexus-view>
+	<flexus-view flex>
 	
-		<flexus-toolbar elevation="2" dark>
-			<button icon="menu"></button>
-			Kalkulačka
+		<flexus-toolbar elevation="2" multisection>
+			<section>
+				<button clickable icon="menu"></button>
+				<div flex>Kalkulačka</div>
+				<button clickable icon="more"></button>
+			</section>
+			<section id="display" right>24 + 56</section>
 		</flexus-toolbar>
 
-		<main>
+		<main vertical layout>
 
-			<div id="display"></div>
-
-			<br>
-
-			<div id="buttons">
-				<button id="num9">9</button>
-				<button id="num8">8</button>
-				<button id="num7">7</button>
-				<button id="num6">6</button>
-				<button id="num5">5</button>
-				<button id="num4">4</button>
-				<button id="num3">3</button>
-				<button id="num2">2</button>
-				<button id="num1">1</button>
-				<button id="num0">0</button>
-				<button id="dot">.</button>
+			<div layout flex id="foo">
+				<section flex-3 layout id="cisla">
+					<button clickable recentering spill id="num9">9</button>
+					<button clickable recentering spill id="num8">8</button>
+					<button clickable recentering spill id="num7">7</button>
+					<button clickable recentering spill id="num6">6</button>
+					<button clickable recentering spill id="num5">5</button>
+					<button clickable recentering spill id="num4">4</button>
+					<button clickable id="num3">3</button>
+					<button clickable id="num2">2</button>
+					<button clickable id="num1">1</button>
+					<button clickable id="equals">=</button>
+					<button clickable id="num0">0</button>
+					<button clickable id="dot">.</button>
+				</section>
+				<section flex-1 layout vertical id="operace">
+					<button clickable id="backspace">&larr;</button>
+					<!--button id="clear">C</button-->
+					<button clickable id="add">+</button>
+					<button clickable id="sub">-</button>
+					<button clickable id="mul">*</button>
+					<button clickable id="div">/</button>
+				</section>
 			</div>
 
-			<br>
-
-			<button id="add">+</button>
-			<button id="sub">-</button>
-			<button id="mul">*</button>
-			<button id="div">/</button>
-			<button id="equals">=</button>
-			<button id="clear">C</button>
-			<button id="backspace">&larr;</button>
 
 		</main>
 
 	</flexus-view>
 
+	<!--script src="flexus/flexus.styleloader.js"></script-->
+	<script src="flexus/flexus.ripple.js"></script>
 	<script src="MathLib.js"></script>
 	<script src="main.js"></script>
 </body>

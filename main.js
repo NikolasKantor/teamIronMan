@@ -71,10 +71,10 @@ function dot() {
 	print('.');
 }
 
-var add = () => applyOperation(MathLib.add, '+');
-var sub = () => applyOperation(MathLib.sub, '-');
-var mul = () => applyOperation(MathLib.mul, '*');
-var div = () => applyOperation(MathLib.div, '/');
+var add = applyOperation.bind(null, MathLib.add, '+');
+var sub = applyOperation.bind(null, MathLib.sub, '-');
+var mul = applyOperation.bind(null, MathLib.mul, '*');
+var div = applyOperation.bind(null, MathLib.div, '/');
 
 function applyOperation(opFn, opChar) {
 	if (numbers.length > 1) {
@@ -127,24 +127,23 @@ function backspace() {
 
 
 // button click listeners
-$0.addEventListener('click', () => numberPress(0))
-$1.addEventListener('click', () => numberPress(1))
-$2.addEventListener('click', () => numberPress(2))
-$3.addEventListener('click', () => numberPress(3))
-$4.addEventListener('click', () => numberPress(4))
-$5.addEventListener('click', () => numberPress(5))
-$6.addEventListener('click', () => numberPress(6))
-$7.addEventListener('click', () => numberPress(7))
-$8.addEventListener('click', () => numberPress(8))
-$9.addEventListener('click', () => numberPress(9))
-$dot.addEventListener('click', () => dot())
-$add.addEventListener('click', () => add());
-$sub.addEventListener('click', () => sub());
-$mul.addEventListener('click', () => mul());
-$div.addEventListener('click', () => div());
-$equals.addEventListener('click', () => equals());
-$clear.addEventListener('click', () => clear());
-$backspace.addEventListener('click', () => backspace());
+$0.addEventListener('click', numberPress.bind(null, 0))
+$1.addEventListener('click', numberPress.bind(null, 1))
+$2.addEventListener('click', numberPress.bind(null, 2))
+$3.addEventListener('click', numberPress.bind(null, 3))
+$4.addEventListener('click', numberPress.bind(null, 4))
+$5.addEventListener('click', numberPress.bind(null, 5))
+$6.addEventListener('click', numberPress.bind(null, 6))
+$7.addEventListener('click', numberPress.bind(null, 7))
+$8.addEventListener('click', numberPress.bind(null, 8))
+$9.addEventListener('click', numberPress.bind(null, 9))
+$dot.addEventListener('click', dot.bind(null))
+$add.addEventListener('click', add.bind(null));
+$sub.addEventListener('click', sub.bind(null));
+$mul.addEventListener('click', mul.bind(null));
+$div.addEventListener('click', div.bind(null));
+$equals.addEventListener('click', equals.bind(null));
+$backspace.addEventListener('click', backspace.bind(null));
 
 // key press listeners
 window.addEventListener('keydown', e => {
@@ -169,3 +168,27 @@ window.addEventListener('keydown', e => {
 		// TODO investigate: is there any keyboard mapping for culcators 'clear' function?
 	}
 })
+
+if ('ontouchstart' in window) $backspace.addEventListener('touchstart', backspaceStart)
+if ('onmousedown' in window) $backspace.addEventListener('mousedown', backspaceStart)
+if ('onpointerdown' in window) $backspace.addEventListener('pointerdown', backspaceStart)
+
+if ('ontouchend' in window) $backspace.addEventListener('touchend', backspaceEnd)
+if ('onmouseup' in window) $backspace.addEventListener('mouseup', backspaceEnd)
+if ('onpointerup' in window) $backspace.addEventListener('pointerup', backspaceEnd)
+
+var backspaceTimeout;
+function onBackspaceTimeout() {
+	$display.textContent = '';
+	displayRippleAnimate();
+}
+function backspaceStart(e) {
+	backspaceTimeout = setTimeout(onBackspaceTimeout, 500)
+}
+function backspaceEnd(e) {
+	clearTimeout(backspaceTimeout);
+	var content = $display.textContent;
+	if (content.length) {
+		$display.textContent = content.slice(0, content.length - 1);
+	}
+}

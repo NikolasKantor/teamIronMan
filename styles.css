@@ -1,9 +1,67 @@
-
-flexus-toolbar {
-	background-color: #607D8B !important;
+flexus-ripple {
+	display: block;
+	pointer-events: none;
+	z-index: -1;
+	position: absolute;
+	border-radius: 50%;
+	background-color: currentColor;
+	opacity: 0;
+	transform: translate3d(-50%, -50%, 0) scale(1);
 }
 
 
+
+body {
+	background-color: #3F51B5 !important;	
+}
+
+flexus-toolbar {
+	background-color: #03A9F4 !important;	
+	overflow: hidden;
+}
+flexus-toolbar.error {
+	background-color: #E91E63 !important;	
+}
+	flexus-toolbar section {
+		background-color: transparent !important;	
+	}
+
+flexus-toolbar section#display {
+	height: 96px;
+	font-size: 48px;
+	font-weight: 200;
+	padding-bottom: 8px;
+	white-space: nowrap;
+}
+
+main {
+	padding: 0 !important;
+}
+	main #foo {
+		overflow: hidden;
+	}
+	main #cisla {
+	    flex-wrap: wrap;
+	    align-items: stretch;
+	    flex-direction: row-reverse;
+	}
+		main #cisla button {
+			height: initial;
+			flex-basis: 33%;
+		}
+		main #operace button {
+			flex: 1;
+		}
+		main button {
+			background-color: transparent;
+			font-size: 36px;
+			font-weight: 200;
+			padding: 0;
+			margin: 0;
+		}
+			main button flexus-ripple {
+				color: #03A9F4;	
+			}
 /*
 body {
 	font-family: Segoe UI, serif;
