@@ -40,12 +40,11 @@ function parse(str){
 	cislo = []
 	operace = []
 	idx = 0
-
 	for (i = 0; i < str.length; i++){
 		if (str[i].trim().length){
 			znak = str[i]
 			if (['+','-','*','/','^','!'].contains(znak)){
-				if ((['*','/',undefined].contains(str[i-1])) && ['+','-'].contains(znak))
+				if ((['*','/',undefined, '^','('].contains(str[i-1])) && ['+','-'].contains(znak))
 					cislo.push(znak)
 				else
 					operace.push(znak)
@@ -71,9 +70,9 @@ function parse(str){
 }
 
 function removeOperators(cisla, operace, seznam){
-//	console.log("cisla before:",cisla)
-//	console.log("operace before:",operace)
-//	console.log("seznam:",seznam)
+	//console.log("cisla before:",cisla)
+	//console.log("operace before:",operace)
+	//console.log("seznam:",seznam)
 	while(operace.containsArrItem(seznam)){
 		for(i = 0; i < operace.length; i++){
 			if (seznam.contains(operace[i])){
@@ -139,14 +138,38 @@ function getMeNested(str){
 	return subs
 }
 
-function interpret(str){
+function auto_complete(str){
+	//console.log(str)
+
+	while(['+','-','*','/','^', '('].contains(str.slice(-1)))
+		str = str.substring(0, str.length - 1)
+
+	oteviraci = 0
+	zaviraci = 0
+	str.split('').forEach(znak => {
+		if (znak == '(')
+			oteviraci++
+		if (znak == ')')
+			zaviraci++
+	})
+	while (oteviraci > zaviraci){
+		str += ')'
+		zaviraci++
+	}
+
+	//console.log(str)
+	return str
+}
+
+function interpretuj(str){
 
 	nested = getMeNested(str)
 	nested.forEach(value => {
 		//console.log("before replace", str)
-		str = str.replace(value, interpret(value))
+		str = str.replace(value, interpretuj(value))
 		//console.log("after replace", str)
 	})
+
 
 	result = parse(str)
 	result = removeOperators(result[0], result[1], ['!'])
@@ -161,9 +184,16 @@ function interpret(str){
 	return result[0][0]
 }
 
-//str = "-3^(2+2) + 14/-7 * 3! + (46 + 1 + (144/(12*4)*1))"
-//str = "-3^(2+2) + 14/-7 * 3!"
-str = ""
+function interpret(str){
+	str = auto_complete(str)
+	result = interpretuj(str)
+	return result
+}
+
+//str = "-(3^(2+1-5^1)"
+//str = "-3^(2+1) + 14/-7 * 3!"
+//str = "5*((8+2/1^-2))"
+//str = ""
 
 vysledek = interpret(str)
 console.log("výsledek: "+vysledek)

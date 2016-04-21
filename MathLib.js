@@ -20,9 +20,16 @@ class MathLib {
 	}
 
 	static pow(op1, op2) {
+		var reVal = false
+		if (op2 < 0){
+			reVal = true
+			op2 = (op2 > 0 ? op2 : op2*(-1))
+		}
 		result = 1
 		for (var j = 0; j < op2; j++)
 			result *= op1
+		if (reVal)
+			result = 1/result
 		return result
 	}
 
