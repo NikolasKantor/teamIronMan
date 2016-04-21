@@ -1,10 +1,6 @@
 /*
 	Interpret pro kalkulačku
 	autor: Nikolas Kantor
-
-	TODO:
-		matematická funkce navíc
-		koncove stavy a doplňování
 */
 
 if (typeof require == 'function') {
@@ -39,6 +35,7 @@ function parse(str){
 	cisla = []
 	cislo = []
 	operace = []
+	op = []
 	idx = 0
 	for (i = 0; i < str.length; i++){
 		if (str[i].trim().length){
@@ -58,8 +55,13 @@ function parse(str){
 					cislo = []
 				}
 			}
+			else if(['s', 'q', 'r', 't'].contains(znak)){
+				op.push(znak)
+				if (op.join('') == 'sqrt')
+					operace.push('sqrt')
+			}
 			else{
-				//console.log("The fuck man?")
+
 			}
 		}
 
@@ -97,9 +99,12 @@ function removeOperators(cisla, operace, seznam){
 					case '!':
 						result = MathLib.factorial(op1)
 					break
+					case 'sqrt':
+						result = MathLib.sqrt(op1)
+					break
 				}
 				cisla[i] = result
-				if (operace[i] != '!')
+				if (operace[i] != '!' && operace[i] != 'sqrt')
 					cisla.removeIndex(i+1)
 				operace.removeIndex(i)
 			}
@@ -173,6 +178,7 @@ function interpretuj(str){
 
 	result = parse(str)
 	result = removeOperators(result[0], result[1], ['!'])
+	result = removeOperators(result[0], result[1], ['sqrt'])
 	result = removeOperators(result[0], result[1], ['^'])
 	result = removeOperators(result[0], result[1], ['/'])
 	result = removeOperators(result[0], result[1], ['*'])
@@ -193,7 +199,10 @@ function interpret(str){
 //str = "-(3^(2+1-5^1)"
 //str = "-3^(2+1) + 14/-7 * 3!"
 //str = "5*((8+2/1^-2))"
-//str = ""
+//str = "50!"
+//str = "8/2+3*sqrt(144)+3!"
+//str = "sqrt(125348)"
+str = ""
 
 vysledek = interpret(str)
 console.log("výsledek: "+vysledek)

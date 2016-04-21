@@ -19,6 +19,16 @@ class MathLib {
 		return op1 / op2
 	}
 
+	static factorial(number) {
+		result = 1
+		var x = number
+		for (var j = 0; j < number; j++){
+			result *= x
+			x--
+		}
+		return result
+	}
+
 	static pow(op1, op2) {
 		var reVal = false
 		if (op2 < 0){
@@ -33,13 +43,13 @@ class MathLib {
 		return result
 	}
 
-	static factorial(number) {
-		result = 0
-		var x = number
-		for (var j = 0; j < number; j++){
-			result += x
-			x--
+	static sqrt(op){
+		var presnost = 2
+		var result = presnost * 100
+		for (var i = 0; i < presnost; i++){
+			result = 0.5*(result+(op/result))
 		}
+		result = Math.round(result*1000)/1000
 		return result
 	}
 
