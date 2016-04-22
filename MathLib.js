@@ -20,7 +20,7 @@ class MathLib {
 	}
 
 	static factorial(number) {
-		result = 1
+		var result = 1
 		var x = number
 		for (var j = 0; j < number; j++){
 			result *= x
@@ -31,6 +31,7 @@ class MathLib {
 
 	static pow(op1, op2) {
 		var reVal = false
+		var result
 		if (op2 < 0){
 			reVal = true
 			op2 = (op2 > 0 ? op2 : op2*(-1))
