@@ -202,7 +202,12 @@ function interpret(str){
 //str = "50!"
 //str = "8/2+3*sqrt(144)+3!"
 //str = "sqrt(125348)"
-str = ""
+//str = "sqrt(4)"
+//str = "sqrt(25)"
+//str = "sqrt(1024)"
+//str = "sqrt(36)"
+//str = "3^-2"
+//str = "sqrt(99999999999)"
 
-vysledek = interpret(str)
-console.log("výsledek: "+vysledek)
+//vysledek = interpret(str)
+//console.log("výsledek: "+vysledek)

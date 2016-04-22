@@ -39,13 +39,15 @@ class MathLib {
 		result = 1
 		for (var j = 0; j < op2; j++)
 			result *= op1
-		if (reVal)
-			result = 1/result
+		if (reVal){
+			result = (1/result)*1000
+			result = Math.round(result)/1000
+		}
 		return result
 	}
 
 	static sqrt(op){
-		var presnost = 2
+		var presnost = 25
 		var result = presnost * 100
 		for (var i = 0; i < presnost; i++){
 			result = 0.5*(result+(op/result))
