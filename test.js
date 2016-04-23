@@ -76,9 +76,9 @@ describe('MathLib', function() {
 
 describe('MathLib', function() {
 
-	describe('#sub(256-340)', function () {
-		it('return -76', function () {
-			assert.equal(-76, MathLib.sub(256,-340), 'these numbers are equal');
+	describe('#sub(256--340)', function () {
+		it('return 596', function () {
+			assert.equal(596, MathLib.sub(256,-340), 'these numbers are equal');
 		});
 	});
 
