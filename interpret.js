@@ -2,6 +2,7 @@
 	Interpret pro kalkulačku
 	autor: Nikolas Kantor
 */
+'use strict';
 
 if (typeof require == 'function') {
 	MathLib = require('./MathLib.js')
@@ -13,18 +14,9 @@ Array.prototype.removeIndex = function(index) {
 	}
 }
 
-Array.prototype.contains = function(a) {
+Array.prototype.intersects = function(arr) {
     for (var i = 0; i < this.length; i++) {
-        if (this[i] === a) {
-            return true;
-        }
-    }
-    return false;
-}
-
-Array.prototype.containsArrItem = function(arr) {
-    for (var i = 0; i < this.length; i++) {
-        if (arr.contains(this[i])) {
+        if (arr.includes(this[i])) {
             return true;
         }
     }
@@ -32,16 +24,21 @@ Array.prototype.containsArrItem = function(arr) {
 }
 
 function parse(str) {
-	cisla = []
-	cislo = []
-	operace = []
-	op = []
-	idx = 0
-	for (i = 0; i < str.length; i++) {
+	var cisla = []
+	var cislo = []
+	var operace = []
+	var op = []
+	var idx = 0
+	var znak
+	var tokens1 = ['+','-','*','/','^','!']
+	var tokens2 = ['*','/',undefined, '^','(']
+	var tokens3 = ['+','-']
+	var tokens4 = ['s', 'q', 'r', 't']
+	for (var i = 0; i < str.length; i++) {
 		if (str[i].trim().length) {
 			znak = str[i]
-			if (['+','-','*','/','^','!'].contains(znak)) {
-				if ((['*','/',undefined, '^','('].contains(str[i-1])) && ['+','-'].contains(znak))
+			if (tokens1.includes(znak)) {
+				if ((tokens2.includes(str[i-1])) && tokens3.includes(znak))
 					cislo.push(znak)
 				else
 					operace.push(znak)
@@ -53,7 +50,7 @@ function parse(str) {
 					cisla.push(cislo.join(''))
 					cislo = []
 				}
-			} else if (['s', 'q', 'r', 't'].contains(znak)) {
+			} else if (tokens4.includes(znak)) {
 				op.push(znak)
 				if (op.join('') == 'sqrt')
 					operace.push('sqrt')
@@ -72,35 +69,20 @@ function removeOperators(cisla, operace, seznam) {
 	//console.log("cisla before:",cisla)
 	//console.log("operace before:",operace)
 	//console.log("seznam:",seznam)
-	while(operace.containsArrItem(seznam)) {
-		for(i = 0; i < operace.length; i++) {
-			if (seznam.contains(operace[i])) {
-				op1 = Number(cisla[i])
-				op2 = Number(cisla[i+1])
+	while (operace.intersects(seznam)) {
+		for (var i = 0; i < operace.length; i++) {
+			if (seznam.includes(operace[i])) {
+				var op1 = Number(cisla[i])
+				var op2 = Number(cisla[i+1])
 				switch(operace[i]) {
-					case '+':
-						result = MathLib.add(op1, op2)
-					break
-					case '-':
-						result = MathLib.sub(op1, op2)
-					break
-					case '*':
-						result = MathLib.mul(op1, op2)
-					break
-					case '/':
-						result = MathLib.div(op1, op2)
-					break
-					case '^':
-						result = MathLib.pow(op1, op2)
-					break
-					case '!':
-						result = MathLib.factorial(op1)
-					break
-					case 'sqrt':
-						result = MathLib.sqrt(op1)
-					break
+					case '+':	cisla[i] = MathLib.add(op1, op2);	break
+					case '-':	cisla[i] = MathLib.sub(op1, op2);	break
+					case '*':	cisla[i] = MathLib.mul(op1, op2);	break
+					case '/':	cisla[i] = MathLib.div(op1, op2);	break
+					case '^':	cisla[i] = MathLib.pow(op1, op2);	break
+					case '!':	cisla[i] = MathLib.factorial(op1);	break
+					case 'sqrt':cisla[i] = MathLib.sqrt(op1);		break
 				}
-				cisla[i] = result
 				if (operace[i] != '!' && operace[i] != 'sqrt')
 					cisla.removeIndex(i + 1)
 				operace.removeIndex(i)
@@ -114,11 +96,12 @@ function removeOperators(cisla, operace, seznam) {
 }
 
 function getMeNested(str) {
-	read = false
-	substr = ""
-	subs = []
-	deep = 0
-	for (i = 0; i < str.length; i++) {
+	var read = false
+	var substr = ""
+	var subs = []
+	var deep = 0
+	var ch
+	for (var i = 0; i < str.length; i++) {
 		ch = str[i]
 		if (ch == '(') {
 			read = true
@@ -143,11 +126,12 @@ function getMeNested(str) {
 function auto_complete(str) {
 	//console.log(str)
 
-	while(['+','-','*','/','^', '('].contains(str.slice(-1)))
+	var tokens = ['+','-','*','/','^', '(']
+	while (tokens.includes(str.slice(-1)))
 		str = str.substring(0, str.length - 1)
 
-	oteviraci = 0
-	zaviraci = 0
+	var oteviraci = 0
+	var zaviraci = 0
 	str.split('').forEach(znak => {
 		if (znak == '(')
 			oteviraci++
@@ -165,15 +149,13 @@ function auto_complete(str) {
 
 function interpretuj(str) {
 
-	nested = getMeNested(str)
-	nested.forEach(value => {
+	getMeNested(str).forEach(value => {
 		//console.log("before replace", str)
 		str = str.replace(value, interpretuj(value))
 		//console.log("after replace", str)
 	})
 
-
-	result = parse(str)
+	var result = parse(str)
 	result = removeOperators(result[0], result[1], ['!'])
 	result = removeOperators(result[0], result[1], ['sqrt'])
 	result = removeOperators(result[0], result[1], ['^'])
@@ -189,8 +171,7 @@ function interpretuj(str) {
 
 function interpret(str) {
 	str = auto_complete(str)
-	result = interpretuj(str)
-	return result
+	return interpretuj(str)
 }
 
 //str = "-(3^(2+1-5^1)"
