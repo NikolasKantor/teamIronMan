@@ -4,7 +4,7 @@
 */
 
 if (typeof require == 'function') {
-	var MathLib = require('./MathLib.js')
+	MathLib = require('./MathLib.js')
 }
 
 Array.prototype.removeIndex = function(index) {
