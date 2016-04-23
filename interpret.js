@@ -31,36 +31,33 @@ Array.prototype.containsArrItem = function(arr) {
     return false;
 }
 
-function parse(str){
+function parse(str) {
 	cisla = []
 	cislo = []
 	operace = []
 	op = []
 	idx = 0
-	for (i = 0; i < str.length; i++){
-		if (str[i].trim().length){
+	for (i = 0; i < str.length; i++) {
+		if (str[i].trim().length) {
 			znak = str[i]
-			if (['+','-','*','/','^','!'].contains(znak)){
+			if (['+','-','*','/','^','!'].contains(znak)) {
 				if ((['*','/',undefined, '^','('].contains(str[i-1])) && ['+','-'].contains(znak))
 					cislo.push(znak)
 				else
 					operace.push(znak)
-			}
-			else if(!isNaN(parseInt(znak)) || znak == "."){
-				if (!isNaN(parseInt(str[i+1])) || str[i+1] == ".")
+			} else if (!isNaN(parseInt(znak)) || znak == '.') {
+				if (!isNaN(parseInt(str[i+1])) || str[i+1] == '.')
 					cislo.push(znak)
 				else{
 					cislo.push(znak)
 					cisla.push(cislo.join(''))
 					cislo = []
 				}
-			}
-			else if(['s', 'q', 'r', 't'].contains(znak)){
+			} else if (['s', 'q', 'r', 't'].contains(znak)) {
 				op.push(znak)
 				if (op.join('') == 'sqrt')
 					operace.push('sqrt')
-			}
-			else{
+			} else {
 
 			}
 		}
@@ -71,16 +68,16 @@ function parse(str){
 	return [cisla, operace]
 }
 
-function removeOperators(cisla, operace, seznam){
+function removeOperators(cisla, operace, seznam) {
 	//console.log("cisla before:",cisla)
 	//console.log("operace before:",operace)
 	//console.log("seznam:",seznam)
-	while(operace.containsArrItem(seznam)){
-		for(i = 0; i < operace.length; i++){
-			if (seznam.contains(operace[i])){
+	while(operace.containsArrItem(seznam)) {
+		for(i = 0; i < operace.length; i++) {
+			if (seznam.contains(operace[i])) {
 				op1 = Number(cisla[i])
 				op2 = Number(cisla[i+1])
-				switch(operace[i]){
+				switch(operace[i]) {
 					case '+':
 						result = MathLib.add(op1, op2)
 					break
@@ -105,7 +102,7 @@ function removeOperators(cisla, operace, seznam){
 				}
 				cisla[i] = result
 				if (operace[i] != '!' && operace[i] != 'sqrt')
-					cisla.removeIndex(i+1)
+					cisla.removeIndex(i + 1)
 				operace.removeIndex(i)
 			}
 		}
@@ -116,21 +113,21 @@ function removeOperators(cisla, operace, seznam){
 
 }
 
-function getMeNested(str){
+function getMeNested(str) {
 	read = false
 	substr = ""
 	subs = []
 	deep = 0
-	for(i = 0; i < str.length; i++){
+	for (i = 0; i < str.length; i++) {
 		ch = str[i]
-		if (ch == '('){
+		if (ch == '(') {
 			read = true
 			if (deep++ == 0)
 				continue
 		}
-		if (ch == ')'){
+		if (ch == ')') {
 			deep--;
-			if (deep == 0){
+			if (deep == 0) {
 				read = false
 				subs.push(substr)
 				substr = ""
@@ -143,7 +140,7 @@ function getMeNested(str){
 	return subs
 }
 
-function auto_complete(str){
+function auto_complete(str) {
 	//console.log(str)
 
 	while(['+','-','*','/','^', '('].contains(str.slice(-1)))
@@ -157,7 +154,7 @@ function auto_complete(str){
 		if (znak == ')')
 			zaviraci++
 	})
-	while (oteviraci > zaviraci){
+	while (oteviraci > zaviraci) {
 		str += ')'
 		zaviraci++
 	}
@@ -166,7 +163,7 @@ function auto_complete(str){
 	return str
 }
 
-function interpretuj(str){
+function interpretuj(str) {
 
 	nested = getMeNested(str)
 	nested.forEach(value => {
@@ -190,7 +187,7 @@ function interpretuj(str){
 	return result[0][0]
 }
 
-function interpret(str){
+function interpret(str) {
 	str = auto_complete(str)
 	result = interpretuj(str)
 	return result
