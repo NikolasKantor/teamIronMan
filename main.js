@@ -105,12 +105,14 @@ function showDisplayRipple() {
 }
 
 events.on('error', (message = 'error') => {
+	console.log('EVENT: error')
 	isError = true;
 	showErrorRipple();
 	expression = '';
 	$display.textContent = message;
 })
 events.on('unerror', (message = '') => {
+	console.log('EVENT: unerror')
 	isError = false
 	hideErrorRipple();
 	if (message.length) {
@@ -119,6 +121,7 @@ events.on('unerror', (message = '') => {
 })
 
 events.on('display-char', (char = '') => {
+	console.log('EVENT: display-char', char)
 	if (isError) {
 		events.emit('unerror');
 	}
@@ -126,13 +129,14 @@ events.on('display-char', (char = '') => {
 	$display.textContent = expression;
 })
 events.on('display-backspace', () => {
-	console.log('on backspace', expression.length, expression);
+	console.log('EVENT: display-backspace')
 	if (expression.length) {
 		expression = expression.slice(0, expression.length - 1);
 		$display.textContent = expression;
 	}
 })
 events.on('display-clear', () => {
+	console.log('EVENT: display-clear')
 	if (isError) {
 		events.emit('unerror');
 	} else {
@@ -141,6 +145,7 @@ events.on('display-clear', () => {
 	$display.textContent = expression = '';
 })
 events.on('display-result', () => {
+	console.log('EVENT: display-result', expression)
 	displayRippleAnimation.currentTime = 0;
 	displayRippleAnimation.play();
 	if (expression.length) {
