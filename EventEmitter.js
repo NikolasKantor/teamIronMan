@@ -19,7 +19,7 @@ class EventEmitter {
 
 	emit(name, ...args) {
 		var callbacks = this._events[name];
-		if (callbacks.length) {
+		if (callbacks && callbacks.length) {
 			for (var i = 0, len = callbacks.length; i < len; i++) {
 				callbacks[i].call(this, ...args)
 			}

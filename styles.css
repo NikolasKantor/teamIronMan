@@ -37,7 +37,7 @@ flexus-toolbar section#display {
 main {
 	padding: 0 !important;
 }
-	main #foo {
+	main #buttons {
 		overflow: hidden;
 	}
 	main #cisla {
@@ -49,7 +49,7 @@ main {
 			height: initial;
 			flex-basis: 33%;
 		}
-		main #operace button {
+		main .operace button {
 			flex: 1;
 		}
 		main button {
