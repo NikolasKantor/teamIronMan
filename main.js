@@ -14,6 +14,7 @@ var displayRipple = createRiple();
 errorRipple.style.backgroundColor = '#E91E63';
 unerrorRipple.style.backgroundColor = '#03A9F4';
 
+// TODO recalculate on window resize
 var displayRippleAnimation = animateRipple(toolbarWidth, toolbarHeight, displayRipple, $toolbar, false, false, false, 0.6, 0, 300, false)
 var errorAnimation = animateRipple(toolbarWidth, toolbarHeight, errorRipple, $toolbar, false, false, false, 1, 1, 300, false, () => {
 	errorRipple.style.display = 'none';
@@ -126,6 +127,9 @@ events.on('display-char', (char = '') => {
 	$display.textContent = expression;
 })
 events.on('display-backspace', () => {
+	if (isError) {
+		events.emit('unerror');
+	}
 	if (expression.length) {
 		expression = expression.slice(0, expression.length - 1);
 		$display.textContent = expression;
@@ -150,7 +154,7 @@ events.on('display-result', () => {
 			console.error('error evaluating expression', expression, error)
 			events.emit('error');
 		}
-		if (result === undefined) {
+		if (result === undefined || result == Infinity) {
 			// display error if result is undefined
 			events.emit('error');
 		} else {
