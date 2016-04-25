@@ -35,7 +35,3 @@ class EventEmitter {
 	}
 	
 }
-
-// export MathLib class the old fashioned way for both brower and node (for testing)
-(typeof window === 'object' ? window : global).EventEmitter = EventEmitter;
-if (typeof module == 'object') module.exports = EventEmitter
