@@ -1,0 +1,3 @@
+﻿xkanto10 5 (makefile, programová dokumentace, interpret, implementace funkcí v MathLibu)
+xkovar70 5 (výsledné UI, main (core.js, ui.js), screenshots, debugging, profilling, kostra MathLibu)
+xcerve18 5 (mockup UI, testy, uživatelská příručka)
