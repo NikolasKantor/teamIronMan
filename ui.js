@@ -1,5 +1,3 @@
-var events = new EventEmitter();
-
 var $toolbar = document.querySelector('flexus-toolbar')
 var $display = document.querySelector('#display');
 var $buttons = document.querySelector('#buttons');
@@ -87,9 +85,6 @@ function backspaceEnd(e) {
 }
 
 
-var isError = false;
-var expression = '';
-
 function showErrorRipple() {
 	errorRipple.style.display = 'block';
 	errorAnimation.currentTime = 0;
@@ -105,13 +100,18 @@ function showDisplayRipple() {
 	displayRippleAnimation.play();
 }
 
+var isError = false;
+var expression = '';
+
 events.on('error', (message = 'error') => {
+	if (isError) return;
 	isError = true;
 	showErrorRipple();
 	expression = '';
 	$display.textContent = message;
 })
 events.on('unerror', (message = '') => {
+	if (!isError) return;
 	isError = false
 	hideErrorRipple();
 	if (message.length) {
