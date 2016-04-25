@@ -1,18 +1,3 @@
-/*
-
-document.querySelector('flexus-toolbar').addEventListener('click', e => {
-	var ripple = document.createElement('div');
-	ripple.style.backgroundColor = 'red';
-	ripple.style.borderRadius = '50%';
-	ripple.style.position = 'absolute';
-	ripple.style.width = ripple.style.height = '20px';
-	ripple.style.left = e.offsetX + 'px';
-	ripple.style.top = e.offsetY + 'px';
-
-	var target = e.target;
-	target.appendChild(ripple);
-})
-*/
 document.addEventListener('click', e => {
 	var node = e.target;
 	while (node !== null) {
@@ -30,6 +15,7 @@ function onClickable(e, target) {
 }
 
 var defaultDuration = 1000;
+
 
 class Ripple {
 
@@ -127,11 +113,7 @@ class Ripple {
 	}
 
 	replay(x, y) {
-		if (this.player.playState == 'finished') {
-			this.player.currentTime = 0;
-		} else {
-			this.reset();
-		}
+		this.reset();
 		if (x !== undefined) {
 			this.reposition(x, y);
 		}
@@ -140,6 +122,7 @@ class Ripple {
 	reset() {
 		this.player.pause();
 		this.player.currentTime = 0;
+		this.rippleElement.style.display = 'block';
 	}
 
 	static create() {
