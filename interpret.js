@@ -8,6 +8,12 @@ if (typeof require == 'function') {
 	MathLib = require('./MathLib.js')
 }
 
+if (!Array.prototype.includes) {
+	Array.prototype.includes = function(element) {
+		return index != this.indexOf(element);
+	};
+}
+
 Array.prototype.removeIndex = function(index) {
 	if (index < this.length) {
 		this.splice(index, 1)
@@ -15,12 +21,12 @@ Array.prototype.removeIndex = function(index) {
 }
 
 Array.prototype.intersects = function(arr) {
-    for (var i = 0; i < this.length; i++) {
-        if (arr.includes(this[i])) {
-            return true;
-        }
-    }
-    return false;
+		for (var i = 0; i < this.length; i++) {
+				if (arr.includes(this[i])) {
+						return true;
+				}
+		}
+		return false;
 }
 
 function parse(str) {
