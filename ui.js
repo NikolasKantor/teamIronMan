@@ -5,30 +5,33 @@ var $backspace = document.querySelector('#buttons button[data-action="backspace"
 
 var toolbarWidth = $toolbar.offsetWidth;
 var toolbarHeight = $toolbar.offsetHeight;
-var errorRipple = createRiple();
-var unerrorRipple = createRiple();
-var displayRipple = createRiple();
 
-errorRipple.style.backgroundColor = '#E91E63';
-unerrorRipple.style.backgroundColor = '#03A9F4';
 
 // TODO recalculate on window resize
-var displayRippleAnimation = animateRipple(toolbarWidth, toolbarHeight, displayRipple, $toolbar, false, false, false, 0.6, 0, 300, false)
-var errorAnimation = animateRipple(toolbarWidth, toolbarHeight, errorRipple, $toolbar, false, false, false, 1, 1, 300, false, () => {
-	errorRipple.style.display = 'none';
-	$toolbar.className = 'error';
+var displayRipple = new Ripple($toolbar, {x: toolbarWidth, y: toolbarHeight});
+var errorRipple = new Ripple($toolbar, {
+	x: toolbarWidth,
+	y: toolbarHeight,
+	fromOpacity: 1,
+	toOpacity: 1,
+	color: '#E91E63',
+	callback: function() {
+		this.rippleElement.style.display = 'none';
+		$toolbar.className = 'error';
+	}
 })
-var unerrorAnimation = animateRipple(toolbarWidth, toolbarHeight, unerrorRipple, $toolbar, false, false, false, 1, 1, 300, false, () => {
-	unerrorRipple.style.display = 'none';
-	$toolbar.className = '';
-})
+var unerrorRipple = new Ripple($toolbar, {
+	x: toolbarWidth,
+	y: toolbarHeight,
+	fromOpacity: 1,
+	toOpacity: 1,
+	color: '#03A9F4',
+	callback: function() {
+		this.rippleElement.style.display = 'none';
+		$toolbar.className = '';
+	}
+});
 
-errorAnimation.pause();
-errorAnimation.currentTime = 0;
-unerrorAnimation.pause();
-unerrorAnimation.currentTime = 0;
-displayRippleAnimation.pause();
-displayRippleAnimation.currentTime = 0;
 
 $buttons.addEventListener('click', e => {
 	if (e.target.dataset.char) {
@@ -86,31 +89,25 @@ function backspaceEnd(e) {
 
 
 function showErrorRipple() {
-	errorRipple.style.display = 'block';
-	errorAnimation.currentTime = 0;
-	errorAnimation.play();
+	errorRipple.rippleElement.style.display = 'block';
+	errorRipple.replay();
 }
 function hideErrorRipple() {
-	unerrorRipple.style.display = 'block';
-	unerrorAnimation.currentTime = 0;
-	unerrorAnimation.play();
-}
-function showDisplayRipple() {
-	displayRippleAnimation.currentTime = 0;
-	displayRippleAnimation.play();
+	unerrorRipple.rippleElement.style.display = 'block';
+	unerrorRipple.replay();
 }
 
 var isError = false;
 var expression = '';
 
-events.on('error', (message = 'error') => {
+events.on('math-error', (message = 'error') => {
 	if (isError) return;
 	isError = true;
 	showErrorRipple();
 	expression = '';
 	$display.textContent = message;
 })
-events.on('unerror', (message = '') => {
+events.on('math-unerror', (message = '') => {
 	if (!isError) return;
 	isError = false
 	hideErrorRipple();
@@ -121,14 +118,14 @@ events.on('unerror', (message = '') => {
 
 events.on('display-char', (char = '') => {
 	if (isError) {
-		events.emit('unerror');
+		events.emit('math-unerror');
 	}
 	expression += char;
 	$display.textContent = expression;
 })
 events.on('display-backspace', () => {
 	if (isError) {
-		events.emit('unerror');
+		events.emit('math-unerror');
 	}
 	if (expression.length) {
 		expression = expression.slice(0, expression.length - 1);
@@ -137,26 +134,25 @@ events.on('display-backspace', () => {
 })
 events.on('display-clear', () => {
 	if (isError) {
-		events.emit('unerror');
+		events.emit('math-unerror');
 	} else {
-		showDisplayRipple();
+		displayRipple.replay();
 	}
 	$display.textContent = expression = '';
 })
 events.on('display-result', () => {
-	displayRippleAnimation.currentTime = 0;
-	displayRippleAnimation.play();
+	displayRipple.replay();
 	if (expression.length) {
 		// catch unexpected errors during interpreting expression
 		try {
 			var result = interpret(expression);
 		} catch (error) {
 			console.error('error evaluating expression', expression, error)
-			events.emit('error');
+			events.emit('math-error');
 		}
 		if (result === undefined || result == Infinity) {
 			// display error if result is undefined
-			events.emit('error');
+			events.emit('math-error');
 		} else {
 			// result is ok, display it
 			$display.textContent = expression = result + '';

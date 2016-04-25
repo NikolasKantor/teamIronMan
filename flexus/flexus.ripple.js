@@ -1,8 +1,4 @@
-function createRiple() {
-	var ripple = document.createElement('flexus-ripple');
-	ripple.style.transform = 'translate3d(-50%, -50%, 0) scale(1)';
-	return ripple;
-}/*
+/*
 
 document.querySelector('flexus-toolbar').addEventListener('click', e => {
 	var ripple = document.createElement('div');
@@ -28,92 +24,128 @@ document.addEventListener('click', e => {
 })
 
 function onClickable(e, target) {
-	var spill = target.hasAttribute('spill');
-	var recentering = target.hasAttribute('recentering');
-	var centered = target.hasAttribute('centered');
 	var x = e.offsetX;
 	var y = e.offsetY;
-	var ripple = createRiple();
-	animateRipple(x, y, ripple, target, spill, recentering, centered);
+	(target.ripple || new Ripple(target)).replay(x, y);
 }
 
-function animateRipple(
-	x, y,
-	ripple,
-	target,
-	spill = false,
-	recentering = false,
-	centered = false,
-	fromOpacity = 0.6,
-	toOpacity = 0,
-	duration,
-	autohide = true,
-	callback
-) {
+var defaultDuration = 1000;
 
-	var targetWidth = target.offsetWidth;
-	var targetHeight = target.offsetHeight;
+class Ripple {
 
-	if (centered) {
-		// x a y je uprostred
-		x = targetWidth / 2;
-		y = targetHeight / 2;
-	} else if (recentering) {
-		// zkoriguje x a y smerem na stred
-		var halfWidth = targetWidth / 2;
-		var halfHeight = targetHeight / 2;
-		x = (x - halfWidth) / 2 + halfWidth;
-		y = (y - halfHeight) / 2 + halfHeight;
+	constructor(element, options) {
+		this.element = element;
+		this.spill = element.hasAttribute('spill') || this.spill || false;
+		this.recentering = element.hasAttribute('recentering') || this.recentering || false;
+		this.centered = element.hasAttribute('centered') || this.centered || false;
+		Object.assign(this, options);
+		this.fromOpacity = this.fromOpacity || 0.6;
+		this.toOpacity = this.toOpacity || 0;
+		this.autohide = this.autohide || true;
+
+		this.rippleElement = this.element.appendChild(Ripple.create());
+		if (this.color) {
+			this.rippleElement.style.backgroundColor = this.color;
+		}
+		this.setupPlayer();
+		if (this.x !== undefined) {
+			this.reposition(this.x, this.y);
+		}
+		if (element.ripple == undefined) {
+			element.ripple = this;
+		}
 	}
 
-	var longWidth = Math.max(x, targetWidth - x);
-	var longHeight = Math.max(y, targetHeight - y);
+	reposition(x, y) {
+		this.x = x;
+		this.y = y;
 
-	var diameter = Math.sqrt((longWidth * longWidth) + (longHeight * longHeight));
+		var elementWidth = this.element.offsetWidth;
+		var elementHeight = this.element.offsetHeight;
 
-	if (duration === undefined) {
-		duration = 300;
-		// TODO - duration jeste ovlivnovat podle diameter (na mobilu je to pomale, na tabletu moc rychle)
-		if (spill) {
+		if (this.centered) {
+			// x a y je uprostred
+			this.x = elementWidth / 2;
+			this.y = elementHeight / 2;
+		} else if (this.recentering) {
+			// zkoriguje x a y smerem na stred
+			var halfWidth = elementWidth / 2;
+			var halfHeight = elementHeight / 2;
+			this.x = (this.x - halfWidth) / 2 + halfWidth;
+			this.y = (this.y - halfHeight) / 2 + halfHeight;
+		}
+
+		var longWidth = Math.max(this.x, elementWidth - this.x);
+		var longHeight = Math.max(this.y, elementHeight - this.y);
+
+		this.diameter = Math.sqrt((longWidth * longWidth) + (longHeight * longHeight));
+		if (this.duration === undefined) {
+			this.duration = 300;
+			// TODO - duration jeste ovlivnovat podle this.diameter (na mobilu je to pomale, na tabletu moc rychle)
+			if (this.spill) {
+			} else {
+				this.duration = 400;
+			}
+		}
+
+		if (this.spill) {
+			this.diameter *= 1.4;
 		} else {
-			duration = 400;
+			this.diameter *= 2;
+			this.element.style.overflow = 'hidden';
 		}
+		this.player.playbackRate = defaultDuration / this.duration;
+
+		this.rippleElement.style.width = this.rippleElement.style.height = this.diameter + 'px';
+		// TODO davat na misto pomoci top/left oproti translate3d
+		this.rippleElement.style.left = this.x + 'px';
+		this.rippleElement.style.top = this.y + 'px';
 	}
 
-	if (spill) {
-		diameter *= 1.4;
-	} else {
-		diameter *= 2;
-		target.style.overflow = 'hidden';
-	}
-
-	ripple.style.width = ripple.style.height = diameter + 'px';
-
-	// TODO davat na misto pomoci top/left oproti translate3d
-	ripple.style.left = x + 'px';
-	ripple.style.top = y + 'px';
-
-	target.appendChild(ripple);
-
-	var player = ripple.animate([{
-		display: 'block',
-		opacity: fromOpacity,
-		transform: 'translate3d(-50%, -50%, 0) scale(0)'
-	}, {
-		display: 'none',
-		opacity: toOpacity,
-		transform: 'translate3d(-50%, -50%, 0) scale(1)'
-	}], {
-		duration,
-		easing: 'ease-in'
-	})
-	
-	player.onfinish = function() {
-		if (autohide) {
-			ripple.style.display = 'none';
+	setupPlayer() {
+		this.player = this.rippleElement.animate([{
+			display: 'block',
+			opacity: this.fromOpacity,
+			transform: 'translate3d(-50%, -50%, 0) scale(0)'
+		}, {
+			display: 'none',
+			opacity: this.toOpacity,
+			transform: 'translate3d(-50%, -50%, 0) scale(1)'
+		}], {
+			duration: defaultDuration,
+			easing: 'ease-in'
+		})
+		
+		this.player.onfinish = () => {
+			if (this.autohide) {
+				this.rippleElement.style.display = 'none';
+			}
+			if (this.callback !== undefined) this.callback.call(this);
 		}
-		if (callback !== undefined) callback();
+
+		this.player.pause();
 	}
 
-	return player;
+	replay(x, y) {
+		if (this.player.playState == 'finished') {
+			this.player.currentTime = 0;
+		} else {
+			this.reset();
+		}
+		if (x !== undefined) {
+			this.reposition(x, y);
+		}
+		this.player.play();
+	}
+	reset() {
+		this.player.pause();
+		this.player.currentTime = 0;
+	}
+
+	static create() {
+		var ripple = document.createElement('flexus-ripple');
+		ripple.style.transform = 'translate3d(-50%, -50%, 0) scale(1)';
+		return ripple;
+	}
+
 }
