@@ -1,12 +1,8 @@
-/*
-	Interpret pro kalkulačku
-	autor: Nikolas Kantor
-*/
 'use strict';
 
 if (typeof global == 'object') {
-	global.MathLib = require('./MathLib.js')
-	global.events = require('./core.js')
+	global.MathLib = require('./MathLib.js');
+	global.events = require('./core.js');
 }
 
 if (!Array.prototype.includes) {
@@ -23,9 +19,9 @@ if (!Array.prototype.includes) {
 */
 Array.prototype.removeIndex = function(index) {
 	if (index < this.length) {
-		this.splice(index, 1)
+		this.splice(index, 1);
 	}
-}
+};
 
 /** 
 * @brief Zjištění společné hodnoty 
@@ -40,11 +36,11 @@ Array.prototype.intersects = function(arr) {
 				}
 		}
 		return false;
-}
+};
 
-var TOKENS1 = ['+','-','*','/','^','!', '√']
-var TOKENS2 = ['*','/',undefined, '^','(','!']
-var TOKENS3 = ['+','-']
+var TOKENS1 = ['+','-','*','/','^','!', '√'];
+var TOKENS2 = ['*','/',undefined, '^','(','!'];
+var TOKENS3 = ['+','-'];
 
 /** 
 * @brief Parser pro následnou interpretaci 
@@ -53,33 +49,33 @@ var TOKENS3 = ['+','-']
 * @return [string, string] vrací pole polí obsahující operátory a hodnoty
 */
 function parse(str) {
-	var cisla = []
-	var cislo = []
-	var operace = []
-	var op = []
-	var idx = 0
-	var znak
+	var cisla = [];
+	var cislo = [];
+	var operace = [];
+	var op = [];
+	var idx = 0;
+	var znak;
 	for (var i = 0; i < str.length; i++) {
 		if (str[i].trim().length) {
-			znak = str[i]
+			znak = str[i];
 			if (TOKENS1.includes(znak)) {
 				if ((TOKENS2.includes(str[i-1])) && TOKENS3.includes(znak))
-					cislo.push(znak)
+					cislo.push(znak);
 				else
-					operace.push(znak)
+					operace.push(znak);
 			} else if (!isNaN(parseInt(znak)) || znak == '.') {
 				if (!isNaN(parseInt(str[i+1])) || str[i+1] == '.')
-					cislo.push(znak)
+					cislo.push(znak);
 				else{
-					cislo.push(znak)
-					cisla.push(cislo.join(''))
-					cislo = []
+					cislo.push(znak);
+					cisla.push(cislo.join(''));
+					cislo = [];
 				}
 			}
 		}
 
 	}
-	return [cisla, operace]
+	return [cisla, operace];
 }
 
 /** 
@@ -94,8 +90,8 @@ function removeOperators(cisla, operace, seznam) {
 	while (operace.intersects(seznam)) {
 		for (var i = 0; i < operace.length; i++) {
 			if (seznam.includes(operace[i])) {
-				var op1 = Number(cisla[i])
-				var op2 = Number(cisla[i+1])
+				var op1 = Number(cisla[i]);
+				var op2 = Number(cisla[i+1]);
 				switch(operace[i]) {
 					case '+':	cisla[i] = MathLib.add(op1, op2);	break
 					case '-':	cisla[i] = MathLib.sub(op1, op2);	break
@@ -106,14 +102,14 @@ function removeOperators(cisla, operace, seznam) {
 					case '√':cisla[i] = MathLib.sqrt(op1);		break
 				}
 				if (operace[i] != '!' && operace[i] != '√')
-					cisla.removeIndex(i + 1)
-				operace.removeIndex(i)
+					cisla.removeIndex(i + 1);
+				operace.removeIndex(i);
 			}
 		}
 	}
 	//console.log("cisla after:",cisla)
 	//console.log("operace after:",operace)
-	return [cisla, operace]
+	return [cisla, operace];
 
 }
 
@@ -124,31 +120,31 @@ function removeOperators(cisla, operace, seznam) {
 * @return string první nalezený uzavorkovaný výraz
 */
 function getMeNested(str) {
-	var read = false
-	var substr = ""
-	var subs = []
-	var deep = 0
-	var ch
+	var read = false;
+	var substr = "";
+	var subs = [];
+	var deep = 0;
+	var ch;
 	for (var i = 0; i < str.length; i++) {
-		ch = str[i]
+		ch = str[i];
 		if (ch == '(') {
-			read = true
+			read = true;
 			if (deep++ == 0)
-				continue
+				continue;
 		}
 		if (ch == ')') {
 			deep--;
 			if (deep == 0) {
-				read = false
-				subs.push(substr)
-				substr = ""
+				read = false;
+				subs.push(substr);
+				substr = "";
 			}
 		}
 		if (read)
-			substr += ch
+			substr += ch;
 	}
 
-	return subs
+	return subs;
 }
 
 /** 
@@ -159,26 +155,26 @@ function getMeNested(str) {
 */
 function autoComplete(str) {
 	// doplneni neuzavorkovaneho SQRT
-	str = str.replace(/([^\(])√\(?(\d+)\)?/, '$1(√($2))')
+	str = str.replace(/([^\(])√\(?(\d+)\)?/, '$1(√($2))');
 
-	var tokens = ['+','-','*','/','^', '(']
+	var tokens = ['+','-','*','/','^', '('];
 	while (tokens.includes(str.slice(-1)))
-		str = str.substring(0, str.length - 1)
+		str = str.substring(0, str.length - 1);
 
-	var oteviraci = 0
-	var zaviraci = 0
+	var oteviraci = 0;
+	var zaviraci = 0;
 	str.split('').forEach(znak => {
 		if (znak == '(')
-			oteviraci++
+			oteviraci++;
 		if (znak == ')')
-			zaviraci++
+			zaviraci++;
 	})
 	while (oteviraci > zaviraci) {
-		str += ')'
-		zaviraci++
+		str += ')';
+		zaviraci++;
 	}
 
-	return str
+	return str;
 }
 
 /** 
@@ -191,25 +187,25 @@ function interpretuj(str) {
 
 	getMeNested(str).forEach(value => {
 		//console.log("before replace", str)
-		str = str.replace(value, interpretuj(value))
+		str = str.replace(value, interpretuj(value));
 		//console.log("after replace", str)
 	})
 
-	var result = parse(str)
+	var result = parse(str);
 	if (!result)
 		return;
-	result = removeOperators(result[0], result[1], ['!'])
-	result = removeOperators(result[0], result[1], ['√'])
-	result = removeOperators(result[0], result[1], ['^'])
-	result = removeOperators(result[0], result[1], ['/'])
-	result = removeOperators(result[0], result[1], ['*'])
-	result = removeOperators(result[0], result[1], ['+','-'])
+	result = removeOperators(result[0], result[1], ['!']);
+	result = removeOperators(result[0], result[1], ['√']);
+	result = removeOperators(result[0], result[1], ['^']);
+	result = removeOperators(result[0], result[1], ['/']);
+	result = removeOperators(result[0], result[1], ['*']);
+	result = removeOperators(result[0], result[1], ['+','-']);
 
 	if (result[0].length > 1) {
-		events.emit('math-error')
+		events.emit('math-error');
 		return;
 	}
-	return result[0][0]
+	return result[0][0];
 }
 
 /** 
@@ -219,15 +215,15 @@ function interpretuj(str) {
 * @return Number výsledná hodnota
 */
 function interpret(str) {
-	str = autoComplete(str)
-	return interpretuj(str)
+	str = autoComplete(str);
+	return interpretuj(str);
 }
 
 
 if (typeof module == 'object') {
-	module.exports.autoComplete = autoComplete
+	module.exports.autoComplete = autoComplete;
 }
 if (typeof module == 'object') {
-	module.exports.interpret = interpret
+	module.exports.interpret = interpret;
 }
 
