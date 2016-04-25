@@ -1,5 +1,5 @@
 /// DOM element <flexus-toolbar>
-var $toolbar = document.querySelector('flexus-toolbar')
+var $toolbar = document.querySelector('flexus-toolbar');
 /// DOM element #display s vystupem kalkulacky
 var $display = document.querySelector('#display');
 /// DOM element #buttons obsahujici ridici tlacitka kalkulacky
@@ -26,7 +26,7 @@ var errorRipple = new Ripple($toolbar, {
 		this.rippleElement.style.display = 'none';
 		$toolbar.className = 'error';
 	}
-})
+});
 /// instance Ripple tridy pro ripple efekt odstraneni chyby
 var unerrorRipple = new Ripple($toolbar, {
 	x: toolbarWidth,
@@ -51,7 +51,7 @@ $buttons.addEventListener('click', e => {
 	if (e.target.dataset.action == 'equals') {
 		events.emit('display-result');
 	}
-})
+});
 
 /// event listener naslouchajici na stisk klavesnice
 window.addEventListener('keydown', e => {
@@ -62,10 +62,10 @@ window.addEventListener('keydown', e => {
 	var code = e.keyCode;
 	if (code >= 48 && code <= 57) {
 		/// stisk numericke klavesy
-		events.emit('display-char', code - 48)
+		events.emit('display-char', code - 48);
 		/// stisk anglicke numericke klavesy
 	} else if (code >= 96 && code <= 105) {
-		events.emit('display-char', code - 96)
+		events.emit('display-char', code - 96);
 	} else switch (code) {
 		case 13: // enter
 		case 187: // =
@@ -81,12 +81,12 @@ window.addEventListener('keydown', e => {
 })
 
 /// naveseni event listeneru na dotyk nebo stisknuti tlacitka backspace
-if ('ontouchstart' in window) $backspace.addEventListener('touchstart', backspaceStart)
-if ('onmousedown' in window) $backspace.addEventListener('mousedown', backspaceStart)
-if ('onpointerdown' in window) $backspace.addEventListener('pointerdown', backspaceStart)
-if ('ontouchend' in window) $backspace.addEventListener('touchend', backspaceEnd)
-if ('onmouseup' in window) $backspace.addEventListener('mouseup', backspaceEnd)
-if ('onpointerup' in window) $backspace.addEventListener('pointerup', backspaceEnd)
+if ('ontouchstart' in window) $backspace.addEventListener('touchstart', backspaceStart);
+if ('onmousedown' in window) $backspace.addEventListener('mousedown', backspaceStart);
+if ('onpointerdown' in window) $backspace.addEventListener('pointerdown', backspaceStart);
+if ('ontouchend' in window) $backspace.addEventListener('touchend', backspaceEnd);
+if ('onmouseup' in window) $backspace.addEventListener('mouseup', backspaceEnd);
+if ('onpointerup' in window) $backspace.addEventListener('pointerup', backspaceEnd);
 /// promenna s informaci o bezitim timeout
 var backspaceTimeout;
 /** 
@@ -99,7 +99,7 @@ function onBackspaceTimeout() {
 * @brief callback stisku klavesy backspace. nastavi pul sekundovy timeout pro uplne vymazani displeje
 */
 function backspaceStart(e) {
-	backspaceTimeout = setTimeout(onBackspaceTimeout, 500)
+	backspaceTimeout = setTimeout(onBackspaceTimeout, 500);
 }
 /** 
 * @brief callback opusteni klavesy backspace. zabrani timeoutu a smaze pouze posledni znak na vypisu
@@ -122,17 +122,17 @@ events.on('math-error', (message = 'error') => {
 	errorRipple.replay();
 	expression = '';
 	$display.textContent = message;
-})
+});
 /// pri udalosti math-unerror se navrati vzhled ui a skryje chybovy ripple
 events.on('math-unerror', (message = '') => {
 	if (!isError) return;
-	isError = false
+	isError = false;
 	unerrorRipple.rippleElement.style.display = 'block';
 	unerrorRipple.replay();
 	if (message.length) {
 		$display.textContent = message;
 	}
-})
+});
 
 /// pri udalosti display-char se vypise zadany znak na vystup
 events.on('display-char', (char = '') => {
@@ -141,7 +141,7 @@ events.on('display-char', (char = '') => {
 	}
 	expression += char;
 	$display.textContent = expression;
-})
+});
 /// pri udalosti display-backspace se vymaze posledni znak z vystupu
 events.on('display-backspace', () => {
 	if (isError) {
@@ -151,7 +151,7 @@ events.on('display-backspace', () => {
 		expression = expression.slice(0, expression.length - 1);
 		$display.textContent = expression;
 	}
-})
+});
 /// pri udalosti display-clear se smaze veskery vypis
 events.on('display-clear', () => {
 	if (isError) {
@@ -160,7 +160,7 @@ events.on('display-clear', () => {
 		displayRipple.replay();
 	}
 	$display.textContent = expression = '';
-})
+});
 /// pri udalosti display-result se spocita aktualni vyraz a vypise se (nebo pripadna chyba) na vystup
 events.on('display-result', () => {
 	displayRipple.replay();
@@ -182,4 +182,4 @@ events.on('display-result', () => {
 	} else {
 		$display.textContent = 0;
 	}
-})
+});
