@@ -5,8 +5,8 @@
 'use strict';
 
 if (typeof global == 'object') {
-	var MathLib = require('./MathLib.js')
-	var events = require('./core.js')
+	global.MathLib = require('./MathLib.js')
+	global.events = require('./core.js')
 }
 
 if (!Array.prototype.includes) {
@@ -30,22 +30,22 @@ Array.prototype.intersects = function(arr) {
 		return false;
 }
 
-function parse(str) { "6^-sqrt(3)"
+var TOKENS1 = ['+','-','*','/','^','!', '√']
+var TOKENS2 = ['*','/',undefined, '^','(','!']
+var TOKENS3 = ['+','-']
+
+function parse(str) {
 	var cisla = []
 	var cislo = []
 	var operace = []
 	var op = []
 	var idx = 0
 	var znak
-	var tokens1 = ['+','-','*','/','^','!']
-	var tokens2 = ['*','/',undefined, '^','(']
-	var tokens3 = ['+','-']
-	var tokens4 = ['s', 'q', 'r', 't']
 	for (var i = 0; i < str.length; i++) {
 		if (str[i].trim().length) {
 			znak = str[i]
-			if (tokens1.includes(znak)) {
-				if ((tokens2.includes(str[i-1])) && tokens3.includes(znak))
+			if (TOKENS1.includes(znak)) {
+				if ((TOKENS2.includes(str[i-1])) && TOKENS3.includes(znak))
 					cislo.push(znak)
 				else
 					operace.push(znak)
@@ -57,29 +57,14 @@ function parse(str) { "6^-sqrt(3)"
 					cisla.push(cislo.join(''))
 					cislo = []
 				}
-			} else if (tokens4.includes(znak)) {
-				if (znak == 's' && str[i-1] == '-'){
-					events.emit('math-error')
-					return false;
-				}
-				op.push(znak)
-				if (op.join('') == 'sqrt')
-					operace.push('sqrt')
-			} else {
-
 			}
 		}
 
 	}
-	console.log("vstupní operace", operace)
-	console.log("vstupní čisla", cisla)
 	return [cisla, operace]
 }
 
 function removeOperators(cisla, operace, seznam) {
-	//console.log("cisla before:",cisla)
-	//console.log("operace before:",operace)
-	//console.log("seznam:",seznam)
 	while (operace.intersects(seznam)) {
 		for (var i = 0; i < operace.length; i++) {
 			if (seznam.includes(operace[i])) {
@@ -92,9 +77,9 @@ function removeOperators(cisla, operace, seznam) {
 					case '/':	cisla[i] = MathLib.div(op1, op2);	break
 					case '^':	cisla[i] = MathLib.pow(op1, op2);	break
 					case '!':	cisla[i] = MathLib.factorial(op1);	break
-					case 'sqrt':cisla[i] = MathLib.sqrt(op1);		break
+					case '√':cisla[i] = MathLib.sqrt(op1);		break
 				}
-				if (operace[i] != '!' && operace[i] != 'sqrt')
+				if (operace[i] != '!' && operace[i] != '√')
 					cisla.removeIndex(i + 1)
 				operace.removeIndex(i)
 			}
@@ -134,8 +119,9 @@ function getMeNested(str) {
 	return subs
 }
 
-function auto_complete(str) {
-	//console.log(str)
+function autoComplete(str) {
+	// doplneni neuzavorkovaneho SQRT
+	str = str.replace(/([^\(])√\(?(\d+)\)?/, '$1(√($2))')
 
 	var tokens = ['+','-','*','/','^', '(']
 	while (tokens.includes(str.slice(-1)))
@@ -154,7 +140,6 @@ function auto_complete(str) {
 		zaviraci++
 	}
 
-	//console.log(str)
 	return str
 }
 
@@ -170,16 +155,13 @@ function interpretuj(str) {
 	if (!result)
 		return;
 	result = removeOperators(result[0], result[1], ['!'])
-	result = removeOperators(result[0], result[1], ['sqrt'])
+	result = removeOperators(result[0], result[1], ['√'])
 	result = removeOperators(result[0], result[1], ['^'])
 	result = removeOperators(result[0], result[1], ['/'])
 	result = removeOperators(result[0], result[1], ['*'])
 	result = removeOperators(result[0], result[1], ['+','-'])
 
-	console.log("výstupní operace: ",result[1])
-	console.log("výstupní čísla: ",result[0])
-	//console.log("result", result[0][0])
-	if (result[0].length > 1){
+	if (result[0].length > 1) {
 		events.emit('math-error')
 		return;
 	}
@@ -187,24 +169,15 @@ function interpretuj(str) {
 }
 
 function interpret(str) {
-	str = auto_complete(str)
+	str = autoComplete(str)
 	return interpretuj(str)
 }
 
-//str = "-(3^(2+1-5^1)"
-//str = "-3^(2+1) + 14/-7 * 3!"
-//str = "5*((8+2/1^-2))"
-//str = "50!"
-//var str = "8/2+3*sqrt(144)+3!"
-//str = "sqrt(125348)"
-//str = "sqrt(4)"
-//str = "sqrt(25)"
-//str = "sqrt(1024)"
-//str = "sqrt(36)"
-//str = "3^-2"
-//str = "sqrt(99999999999)"
-//var str = "(-((sqrt(9)*(-50/(5^2+25))/-1))+10^0-sqrt(9))*-3"
-//var str = "6^-(sqrt(9))"
 
-//var vysledek = interpret(str)
-//console.log("výsledek: "+vysledek)
+if (typeof module == 'object') {
+	module.exports.autoComplete = autoComplete
+}
+if (typeof module == 'object') {
+	module.exports.interpret = interpret
+}
+

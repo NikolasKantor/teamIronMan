@@ -88,29 +88,22 @@ function backspaceEnd(e) {
 }
 
 
-function showErrorRipple() {
-	errorRipple.rippleElement.style.display = 'block';
-	errorRipple.replay();
-}
-function hideErrorRipple() {
-	unerrorRipple.rippleElement.style.display = 'block';
-	unerrorRipple.replay();
-}
-
 var isError = false;
 var expression = '';
 
 events.on('math-error', (message = 'error') => {
 	if (isError) return;
 	isError = true;
-	showErrorRipple();
+	errorRipple.rippleElement.style.display = 'block';
+	errorRipple.replay();
 	expression = '';
 	$display.textContent = message;
 })
 events.on('math-unerror', (message = '') => {
 	if (!isError) return;
 	isError = false
-	hideErrorRipple();
+	unerrorRipple.rippleElement.style.display = 'block';
+	unerrorRipple.replay();
 	if (message.length) {
 		$display.textContent = message;
 	}
@@ -150,9 +143,9 @@ events.on('display-result', () => {
 			console.error('error evaluating expression', expression, error)
 			events.emit('math-error');
 		}
-		if (result === undefined || result == Infinity) {
+		if (result === undefined || result == NaN) {
 			// display error if result is undefined
-			events.emit('math-error');
+			events.emit('math-error', 'Chybný výraz');
 		} else {
 			// result is ok, display it
 			$display.textContent = expression = result + '';

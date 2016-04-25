@@ -2,7 +2,7 @@
 'use strict';
 
 if (typeof global == 'object') {
-	var events = require('./core.js')
+	global.events = require('./core.js')
 }
 
 class MathLib {
@@ -20,21 +20,21 @@ class MathLib {
 	}
 
 	static div(op1, op2) {
-		if (op2 == 0){
-			events.emit('math-error')
+		if (op2 == 0) {
+			events.emit('math-error', 'Dělení nulou')
 			return;
 		}
 		return op1 / op2
 	}
 
 	static factorial(number) {
-		if (number.toString().includes('.') || number < 0){
-			events.emit('math-error')
+		if (number.toString().includes('.') || number < 0) {
+			events.emit('math-error', 'Zaporné číslo')
 			return;
 		}
 		var result = 1
 		var x = number
-		for (var j = 0; j < number; j++){
+		for (var j = 0; j < number; j++) {
 			result *= x
 			x--
 		}
@@ -44,31 +44,31 @@ class MathLib {
 	static pow(op1, op2) {
 		var reVal = false
 		var result
-		if (op2 < 0){
+		if (op2 < 0) {
 			reVal = true
 			op2 = (op2 > 0 ? op2 : op2*(-1))
 		}
 		result = 1
 		for (var j = 0; j < op2; j++)
 			result *= op1
-		if (reVal){
-			result = (1/result)//*1000
+		if (reVal) {
+			result = (1 / result)//*1000
 			//result = Math.round(result)/1000
 		}
 		return result
 	}
 
-	static sqrt(op){
-		if (op < 0){
-			events.emit('math-error')
+	static sqrt(op) {
+		if (op < 0) {
+			events.emit('math-error', 'Záporné číslo')
 			return;
 		}
 		var presnost = 25
 		var result = presnost * 100
-		for (var i = 0; i < presnost; i++){
-			result = 0.5*(result+(op/result))
+		for (var i = 0; i < presnost; i++) {
+			result = 0.5 * (result + (op / result))
 		}
-		result = Math.round(result*1000)/1000
+		result = Math.round(result * 1000) / 1000
 		return result
 	}
 
