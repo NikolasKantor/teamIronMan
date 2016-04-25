@@ -10,7 +10,7 @@ if (typeof require == 'function') {
 
 if (!Array.prototype.includes) {
 	Array.prototype.includes = function(element) {
-		return index != this.indexOf(element);
+		return this.indexOf(element) != -1;
 	};
 }
 
@@ -184,7 +184,7 @@ function interpret(str) {
 //str = "-3^(2+1) + 14/-7 * 3!"
 //str = "5*((8+2/1^-2))"
 //str = "50!"
-//str = "8/2+3*sqrt(144)+3!"
+//var str = "8/2+3*sqrt(144)+3!"
 //str = "sqrt(125348)"
 //str = "sqrt(4)"
 //str = "sqrt(25)"
@@ -192,6 +192,7 @@ function interpret(str) {
 //str = "sqrt(36)"
 //str = "3^-2"
 //str = "sqrt(99999999999)"
+var str = "sqrt(-1)"
 
-//vysledek = interpret(str)
-//console.log("výsledek: "+vysledek)
+var vysledek = interpret(str)
+console.log("výsledek: "+vysledek)
