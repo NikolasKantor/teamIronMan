@@ -15,12 +15,24 @@ if (!Array.prototype.includes) {
 	};
 }
 
+/** 
+* @brief Smazání podle indexu
+* @param index index ke smazání
+* Zavedení prototypové funkce pro třídu array, která smaže obsah na určitém indexu
+* @return void
+*/
 Array.prototype.removeIndex = function(index) {
 	if (index < this.length) {
 		this.splice(index, 1)
 	}
 }
 
+/** 
+* @brief Zjištění společné hodnoty 
+* @param arr druhé pole k porovnání
+* Zavedení prototypové funkce pro třídu array, která zjistá, zda mají 2 pole nějákou stejnou hodnotu
+* @return boolean zda pole obsahují společný prvek
+*/
 Array.prototype.intersects = function(arr) {
 		for (var i = 0; i < this.length; i++) {
 				if (arr.includes(this[i])) {
@@ -34,6 +46,12 @@ var TOKENS1 = ['+','-','*','/','^','!', '√']
 var TOKENS2 = ['*','/',undefined, '^','(','!']
 var TOKENS3 = ['+','-']
 
+/** 
+* @brief Parser pro následnou interpretaci 
+* @param str string získaný z HTML elementu
+* Funkce rozparsuje string do dvou polí, jedno s číselnýma hodnotama a druhé s operacemi
+* @return [string, string] vrací pole polí obsahující operátory a hodnoty
+*/
 function parse(str) {
 	var cisla = []
 	var cislo = []
@@ -64,6 +82,14 @@ function parse(str) {
 	return [cisla, operace]
 }
 
+/** 
+* @brief Vyhodnocení operátorů z pole
+* @param cisla pole se zbývajícími nevyhodnocenými čísly
+* @param cisla pole se zbývajícími nevyhodnocenými operátory
+* @param seznam pole obsahující operátory které se budou vyhodnocovat
+* Funkce podle seznamu operací které jí příjdou v proměnné seznam tyto operátory z pole operaci vyhonotí, přičemž používá hodnoty ze seznamu čísel
+* @return [string, string] vrací pole polí obsahující operátory a hodnoty
+*/
 function removeOperators(cisla, operace, seznam) {
 	while (operace.intersects(seznam)) {
 		for (var i = 0; i < operace.length; i++) {
@@ -91,6 +117,12 @@ function removeOperators(cisla, operace, seznam) {
 
 }
 
+/** 
+* @brief Vyhledání zanořených operací (uzávorkovaných)
+* @param str string ve kterém se bude vyhledávat
+* Funkce vyhledá ve stringu první uzávorkované operace
+* @return string první nalezený uzavorkovaný výraz
+*/
 function getMeNested(str) {
 	var read = false
 	var substr = ""
@@ -119,6 +151,12 @@ function getMeNested(str) {
 	return subs
 }
 
+/** 
+* @brief Automatické doplňování výrazů
+* @param str string který se bude upravovat
+* Funkce doplňuje validně neukončený výraz, konkrétně dodává zavírací závorky a odstraňuje operátory na konci, za kterými není žádná hodnota
+* @return string doplněný string
+*/
 function autoComplete(str) {
 	// doplneni neuzavorkovaneho SQRT
 	str = str.replace(/([^\(])√\(?(\d+)\)?/, '$1(√($2))')
@@ -143,6 +181,12 @@ function autoComplete(str) {
 	return str
 }
 
+/** 
+* @brief Vyhodnocení stringu
+* @param str string který se bude vyhodnocovat
+* Funkce interpretuje celý string, po nalezení zanořených operací, provedení jejich zpracování následně naparsuje string a provede vyhodnocení
+* @return Number získanou hodnotu
+*/
 function interpretuj(str) {
 
 	getMeNested(str).forEach(value => {
@@ -168,6 +212,12 @@ function interpretuj(str) {
 	return result[0][0]
 }
 
+/** 
+* @brief Interpretace
+* @param str string který se bude vyhodnocovat
+* Funkce provede automatické diplňění stringu podle jeho obsahu, následně jej vyhodnotí a vrací výslednou hodnotu
+* @return Number výsledná hodnota
+*/
 function interpret(str) {
 	str = autoComplete(str)
 	return interpretuj(str)
