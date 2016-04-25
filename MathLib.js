@@ -5,52 +5,92 @@ if (typeof global == 'object') {
 	global.events = require('./core.js')
 }
 
+/** 
+* @brief Knihovna matematickych funkci
+* 
+* Třída se sadou statických metod matematických operací
+*/
 class MathLib {
 
-	static add(op1, op2) {
-		return op1 + op2
+	/** 
+	* @brief součet dvou čísel
+	* @param num1 první sčítanec
+	* @param num2 druhé sčítanec
+	* @return Number
+	*/
+	static add(num1, num2) {
+		return num1 + num2
 	}
 
-	static sub(op1, op2) {
-		return op1 - op2
+	/** 
+	* @brief rozdíl dvou čísel
+	* @param num1 menšenec
+	* @param num2 menšitel
+	* @return Number
+	*/
+	static sub(num1, num2) {
+		return num1 - num2
 	}
 
-	static mul(op1, op2) {
-		return op1 * op2
+	/** 
+	* @brief násobek dvou čísel
+	* @param num1 první činitel
+	* @param num2 druhý činitel
+	* @return Number
+	*/
+	static mul(num1, num2) {
+		return num1 * num2
 	}
 
-	static div(op1, op2) {
-		if (op2 == 0) {
+	/** 
+	* @brief dělení dvou čísel
+	* @param num1 dělenec
+	* @param num2 dělitel
+	* @return Number
+	*/
+	static div(num1, num2) {
+		if (num2 == 0) {
 			events.emit('math-error', 'Dělení nulou')
 			return;
 		}
-		return op1 / op2
+		return num1 / num2
 	}
 
-	static factorial(number) {
-		if (number.toString().includes('.') || number < 0) {
+	/** 
+	* @brief faktoriál danného čísla
+	* @param num číslo
+	* @return Number
+	*/
+	static factorial(num) {
+		if (num.toString().includes('.') || num < 0) {
 			events.emit('math-error', 'Zaporné číslo')
 			return;
 		}
 		var result = 1
-		var x = number
-		for (var j = 0; j < number; j++) {
+		var x = num
+		for (var j = 0; j < num; j++) {
 			result *= x
 			x--
 		}
 		return result
 	}
 
-	static pow(op1, op2) {
+	/** 
+	* @brief umocnění
+	* @param num1 mocněnec
+	* @param num2 mocnitel
+	* @return Number
+	*/
+	static pow(num1, num2) {
 		var reVal = false
 		var result
-		if (op2 < 0) {
+		if (num2 < 0) {
 			reVal = true
-			op2 = (op2 > 0 ? op2 : op2*(-1))
+			num2 = (num2 > 0 ? num2 : num2*(-1))
 		}
 		result = 1
-		for (var j = 0; j < op2; j++)
-			result *= op1
+		for (var j = 0; j < num2; j++)
+			result *= num1
 		if (reVal) {
 			result = (1 / result)//*1000
 			//result = Math.round(result)/1000
@@ -58,15 +98,20 @@ class MathLib {
 		return result
 	}
 
-	static sqrt(op) {
-		if (op < 0) {
+	/** 
+	* @brief odmocnina danného čísla
+	* @param num2 číslo
+	* @return Number
+	*/
+	static sqrt(num) {
+		if (num < 0) {
 			events.emit('math-error', 'Záporné číslo')
 			return;
 		}
 		var presnost = 25
 		var result = presnost * 100
 		for (var i = 0; i < presnost; i++) {
-			result = 0.5 * (result + (op / result))
+			result = 0.5 * (result + (num / result))
 		}
 		result = Math.round(result * 1000) / 1000
 		return result
