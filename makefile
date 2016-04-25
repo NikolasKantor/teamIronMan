@@ -1,13 +1,17 @@
-FILES_TO_ZIP=*
-FILES_TO_DELETE=test.sranec.txt
+LOGINS=xkanto10_xkovar70_xcerve18
+REPO=teamIronMan-master
+
+
+FILES_TO_DELETE=node_modules .gitattributes .gitignore 
 
 .PHONY: doc
 
 pack:
-	zip xkanto10_xkovar70_xcerve07.zip $(FILES_TO_ZIP)
+	rm -r -f $(FILES_TO_DELETE)
+	cd ../.. && zip -r $(LOGINS)/$(REPO)/$(LOGINS).zip $(LOGINS)
 
 clean:
-	rm $(FILES_TO_DELETE)
+	rm -r -f $(FILES_TO_DELETE)
 
 test:
 	curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
