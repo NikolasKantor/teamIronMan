@@ -4,8 +4,9 @@
 */
 'use strict';
 
-if (typeof require == 'function') {
-	MathLib = require('./MathLib.js')
+if (typeof global == 'object') {
+	var MathLib = require('./MathLib.js')
+	var events = require('./core.js')
 }
 
 if (!Array.prototype.includes) {
@@ -29,7 +30,7 @@ Array.prototype.intersects = function(arr) {
 		return false;
 }
 
-function parse(str) {
+function parse(str) { "6^-sqrt(3)"
 	var cisla = []
 	var cislo = []
 	var operace = []
@@ -57,6 +58,10 @@ function parse(str) {
 					cislo = []
 				}
 			} else if (tokens4.includes(znak)) {
+				if (znak == 's' && str[i-1] == '-'){
+					events.emit('math-error')
+					return false;
+				}
 				op.push(znak)
 				if (op.join('') == 'sqrt')
 					operace.push('sqrt')
@@ -66,8 +71,8 @@ function parse(str) {
 		}
 
 	}
-	//console.log("vstupní operace", operace)
-	//console.log("vstupní čisla", cisla)
+	console.log("vstupní operace", operace)
+	console.log("vstupní čisla", cisla)
 	return [cisla, operace]
 }
 
@@ -162,6 +167,8 @@ function interpretuj(str) {
 	})
 
 	var result = parse(str)
+	if (!result)
+		return;
 	result = removeOperators(result[0], result[1], ['!'])
 	result = removeOperators(result[0], result[1], ['sqrt'])
 	result = removeOperators(result[0], result[1], ['^'])
@@ -169,9 +176,13 @@ function interpretuj(str) {
 	result = removeOperators(result[0], result[1], ['*'])
 	result = removeOperators(result[0], result[1], ['+','-'])
 
-	//console.log("výstupní operace: ",result[1])
-	//console.log("výstupní čísla: ",result[0])
+	console.log("výstupní operace: ",result[1])
+	console.log("výstupní čísla: ",result[0])
 	//console.log("result", result[0][0])
+	if (result[0].length > 1){
+		events.emit('math-error')
+		return;
+	}
 	return result[0][0]
 }
 
@@ -192,7 +203,8 @@ function interpret(str) {
 //str = "sqrt(36)"
 //str = "3^-2"
 //str = "sqrt(99999999999)"
-var str = "sqrt(-1)"
+//var str = "(-((sqrt(9)*(-50/(5^2+25))/-1))+10^0-sqrt(9))*-3"
+//var str = "6^-(sqrt(9))"
 
-var vysledek = interpret(str)
-console.log("výsledek: "+vysledek)
+//var vysledek = interpret(str)
+//console.log("výsledek: "+vysledek)

@@ -1,6 +1,10 @@
 // ES6 class syntax only runs in strict mode
 'use strict';
 
+if (typeof global == 'object') {
+	var events = require('./core.js')
+}
+
 class MathLib {
 
 	static add(op1, op2) {
@@ -16,10 +20,18 @@ class MathLib {
 	}
 
 	static div(op1, op2) {
+		if (op2 == 0){
+			events.emit('math-error')
+			return;
+		}
 		return op1 / op2
 	}
 
 	static factorial(number) {
+		if (number.toString().includes('.') || number < 0){
+			events.emit('math-error')
+			return;
+		}
 		var result = 1
 		var x = number
 		for (var j = 0; j < number; j++){
@@ -40,13 +52,17 @@ class MathLib {
 		for (var j = 0; j < op2; j++)
 			result *= op1
 		if (reVal){
-			result = (1/result)*1000
-			result = Math.round(result)/1000
+			result = (1/result)//*1000
+			//result = Math.round(result)/1000
 		}
 		return result
 	}
 
 	static sqrt(op){
+		if (op < 0){
+			events.emit('math-error')
+			return;
+		}
 		var presnost = 25
 		var result = presnost * 100
 		for (var i = 0; i < presnost; i++){
